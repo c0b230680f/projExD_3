@@ -134,6 +134,7 @@ class Score:
     def update(self, screen: pg.Surface):
         screen.blit(self.img, [100, 850])
 
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
