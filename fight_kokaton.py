@@ -125,6 +125,15 @@ class Beam:
             screen.blit(self.img, self.rct)
 
 
+class Score:
+    def __init__(self, score):
+        self.score = score
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.img = self.fonto.render(f"スコア：{self.score}", True, (0, 0, 255))
+
+    def update(self, screen: pg.Surface):
+        screen.blit(self.img, [100, 850])
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -135,7 +144,10 @@ def main():
     beam = None
     clock = pg.time.Clock()
     tmr = 0
+    score = 0
     while True:
+        scr = Score(score)
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
@@ -148,6 +160,7 @@ def main():
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
+                scr.update(screen)
                 fonto = pg.font.Font(None, 80)
                 txt = fonto.render("Game Over", True, (255, 0, 0))
                 screen.blit(txt, [WIDTH/2-150, HEIGHT/2])
@@ -163,6 +176,7 @@ def main():
                     bombs[i] = None
                     bird.change_img(6, screen)
                     pg.display.update()
+                    score += 1
         bombs =[bomb for bomb in bombs if bomb is not None]
 
         key_lst = pg.key.get_pressed()
@@ -171,6 +185,7 @@ def main():
             bomb.update(screen)
         if beam is not None:
             beam.update(screen)
+        scr.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
